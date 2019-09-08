@@ -1,12 +1,12 @@
 require("dotenv").config();
-var axios = require("axios");
+// var axios = require("axios");
 var fs = require("fs");
 //require moment
 src = "https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"
 
 var keys = require("./keys.js");
 
-
+var divider = "\n------------------------------------------------------------\n\n";
 
 // Grab search command line argument
 var search = process.argv[2];
@@ -66,6 +66,7 @@ function findSong(word) {
             //       access_token:"8e8e8ee08e0e"  
             //     }
             //   })
+            console.log(jsonData.artists);
 
             // showData ends up being the string containing the show data we will print to the console
             var songData = [
@@ -73,14 +74,14 @@ function findSong(word) {
                 // The song's name
                 // A preview link of the song from Spotify
                 // The album that the song is from
-                "Artist(s)" + jsonData.artists,
+                "Artist(s): " + jsonData.artists[0].name,
                 "Name: " + jsonData.name,
                 "Preview Link " + jsonData.preview_url,
-                "Abum: " + jsonData.album,
+                "Album: " + jsonData.album.name,
             ].join("\n\n");
 
             // Append showData and the divider to log.txt, print showData to the console
-            fs.appendFile("log.txt", actorData + divider, function (err) {
+            fs.appendFile("log.txt", songData + divider, function (err) {
                 if (err) throw err;
                 console.log(songData);
             })
