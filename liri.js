@@ -1,5 +1,5 @@
 require("dotenv").config();
-// var axios = require("axios");
+var axios = require("axios");
 var fs = require("fs");
 //require moment
 src = "https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"
@@ -44,13 +44,11 @@ if (search === "do-what-it-says") {
 function findSong(word) {
 
 
-    // var URL = "https://api.spotify.com/v1/search?query=" + word + "&offset=0&limit=20&type=track";
-
     // Add code to search the TVMaze API for the given actor
     // The API will return an array containing multiple actors, just grab the first result
     // Append the actor's name, birthday, gender, country, and URL to the `log.txt` file
     // Print this information to the console
-    // axios.get(URL, spotify).then(function (response) {
+
     var Spotify = require('node-spotify-api');
 
     var spotify = new Spotify(keys.spotify);
@@ -60,12 +58,7 @@ function findSong(word) {
         .then(function (response) {
             console.log(response);
             var jsonData = response.tracks.items[0];
-            // , {
-            //     params: {
-            //       fields: "something",
-            //       access_token:"8e8e8ee08e0e"  
-            //     }
-            //   })
+
             console.log(jsonData.artists);
 
             // showData ends up being the string containing the show data we will print to the console
@@ -91,37 +84,8 @@ function findSong(word) {
         });
 };
 
-//         // Place the response.data into a variable, jsonData.
-//         var jsonData = response.data;
-//         // , {
-//         //     params: {
-//         //       fields: "something",
-//         //       access_token:"8e8e8ee08e0e"  
-//         //     }
-//         //   })
-
-//         // showData ends up being the string containing the show data we will print to the console
-//         var songData = [
-//             // Artist(s)
-//             // The song's name
-//             // A preview link of the song from Spotify
-//             // The album that the song is from
-//             "Artist(s)" + jsonData.artists,
-//             "Name: " + jsonData.name,
-//             "Preview Link " + jsonData.preview_url,
-//             "Abum: " + jsonData.album,
-//         ].join("\n\n");
-
-//         // Append showData and the divider to log.txt, print showData to the console
-//         fs.appendFile("log.txt", actorData + divider, function (err) {
-//             if (err) throw err;
-//             console.log(songData);
-//         });
-//     });
-// };
-
 function findMovie(word) {
-    var URL = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=" + word + "&countryCode=US&apikey=gCvRPaFA7rJ17s1Du0MBzlUE3vOU0T5Y";
+    var URL = "http://www.omdbapi.com/?t=" + word + "&apiKey=trilogy";
 
     // Add code to search the TVMaze API for the given actor
     // The API will return an array containing multiple actors, just grab the first result
@@ -129,16 +93,22 @@ function findMovie(word) {
     // Print this information to the console
     axios.get(URL).then(function (response) {
         // Place the response.data into a variable, jsonData.
-        var jsonData = response.data[0].person;
+        var jsonData = response.data;
 
         // showData ends up being the string containing the show data we will print to the console
         var movieData = [
             //             Name of the venue
             // Venue location
             // Date of the Event (use moment to format this as "MM/DD/YYYY")
-            "Venue: " + jsonData.name,
-            "Location: " + jsonData.gender,
-            "Event Date: " + jsonData.birthday,
+            "Title: " + jsonData.Title,
+            "Release Year: " + jsonData.Year,
+            "IMdB Rating: " + jsonData.imdbRating,
+            "Country: " + jsonData.Country,
+            "Language: " + jsonData.Language,
+            "Plot: " + jsonData.Plot,
+            "Actors: " + jsonData.Actors,
+            "Rotten Tomatoes Rating: " + jsonData.tomatoRating,
+            "Rotten Tomatoes URL: " + jsonData.tomatoURL
         ].join("\n\n");
 
         // Append showData and the divider to log.txt, print showData to the console
