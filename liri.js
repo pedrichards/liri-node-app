@@ -2,7 +2,7 @@ require("dotenv").config();
 var axios = require("axios");
 var fs = require("fs");
 //require moment
-src = "https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"
+var moment = require("moment");
 
 var keys = require("./keys.js");
 
@@ -63,10 +63,10 @@ function findSong(word) {
     spotify
         .search({ type: 'track', query: word })
         .then(function (response) {
-            console.log(response);
+            // console.log(response);
             var jsonData = response.tracks.items[0];
 
-            console.log(jsonData.artists);
+            // console.log(jsonData.artists);
 
             // showData ends up being the string containing the show data we will print to the console
             var songData = [
@@ -128,26 +128,31 @@ function findShow(word) {
     // console.log("word: " + word);
     // Add code to search the API
     axios.get(URL).then(function (response) {
+        // console.log("data" + response.data)
         // Place the response.data into a variable, jsonData.
-        var jsonData = response.data[0];
 
-        // var date = (jsonData.datetime).format('MM/DD/YYYY');
 
-        // showData ends up being the string containing the show data we will print to the console
-        var showData = [
-            //             Name of the venue
-            // Venue location
-            // Date of the Event (use moment to format this as "MM/DD/YYYY")
-            "Venue: " + jsonData.venue.name,
-            "Location: " + jsonData.venue.city,
-            "Event Date: " + (jsonData.date).format('L') //MM/DD/YYYY
-        ].join("\n\n");
+        var jsonData = response.data;
+        for (i in response.data) {
 
-        // Append showData and the divider to log.txt, print showData to the console
-        fs.appendFile("log.txt", showData + divider, function (err) {
-            if (err) throw err;
-            console.log(showData);
-        });
+            // var date = (jsonData.datetime).format('MM/DD/YYYY');
+
+            // showData ends up being the string containing the show data we will print to the console
+            var showData = [
+                //             Name of the venue
+                // Venue location
+                // Date of the Event (use moment to format this as "MM/DD/YYYY")
+                "Venue: " + jsonData[i].venue.name,
+                "Location: " + jsonData[i].venue.city,
+                "Event Date: " + moment(jsonData.date).format("MM/DD/YYYY")
+            ].join("\n\n");
+
+            // Append showData and the divider to log.txt, print showData to the console
+            fs.appendFile("log.txt", showData + divider, function (err) {
+                if (err) throw err;
+                console.log(showData);
+            });
+        }
     });
 };
 
