@@ -122,40 +122,76 @@ function findMovie(word) {
         });
     });
 };
+
 function findShow(word) {
-    var URL = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=" + word + "&countryCode=US&apikey=gCvRPaFA7rJ17s1Du0MBzlUE3vOU0T5Y";
-    console.log("word: " + word);
+    var URL = "https://rest.bandsintown.com/artists/" + word + "/events?app_id=codingbootcamp";
+    // console.log("word: " + word);
     // Add code to search the API
     axios.get(URL).then(function (response) {
-        console.log("embedded " + response.data._embedded.events);
-        // console.log("embeddedname " + response.data._embedded.events[i].name);
         // Place the response.data into a variable, jsonData.
-        var jsonData = response.data._embedded.events;
+        var jsonData = response.data[0];
 
+        // var date = (jsonData.datetime).format('MM/DD/YYYY');
 
-        for (var i = 0; i < jsonData.length; i++) {
-            console.log("name " + jsonData[i].name);
-            if (jsonData[i].name === word) {
-                jsonData2 = jsonData.upcomingEvents._total;
-                console.log("data2 " + jsonData2);
-                for (var i = 0; i < jsonData2.length; i++) {
-                    // showData ends up being the string containing the show data we will print to the console
-                    var showData = [
-                        //             Name of the venue
-                        // Venue location
-                        // Date of the Event (use moment to format this as "MM/DD/YYYY")
-                        "Venue: " + jsonData.venue[i],
-                        "Location: " + jsonData.location[i],
-                        "Event Date: " + jsonData.date[i],
-                    ].join("\n\n");
+        // showData ends up being the string containing the show data we will print to the console
+        var showData = [
+            //             Name of the venue
+            // Venue location
+            // Date of the Event (use moment to format this as "MM/DD/YYYY")
+            "Venue: " + jsonData.venue.name,
+            "Location: " + jsonData.venue.city,
+            "Event Date: " + (jsonData.date).format('L') //MM/DD/YYYY
+        ].join("\n\n");
 
-                    // Append showData and the divider to log.txt, print showData to the console
-                    fs.appendFile("log.txt", showData + divider, function (err) {
-                        if (err) throw err;
-                        console.log(showData);
-                    });
-                }
-            }
-        }
+        // Append showData and the divider to log.txt, print showData to the console
+        fs.appendFile("log.txt", showData + divider, function (err) {
+            if (err) throw err;
+            console.log(showData);
+        });
     });
 };
+
+// function findShow(word) {
+//     var URL = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=" + word + "&countryCode=US&apikey=gCvRPaFA7rJ17s1Du0MBzlUE3vOU0T5Y";
+//     console.log("word: " + word);
+//     // Add code to search the API
+//     axios.get(URL).then(function (response) {
+//         console.log("embedded " + response.data._embedded.events);
+//         // console.log("embeddedname " + response.data._embedded.events[i].name);
+//         // Place the response.data into a variable, jsonData.
+//         var jsonData = response.data._embedded.events;
+
+
+//         for (var i = 0; i < jsonData.length; i++) {
+//             console.log("name " + jsonData[i].name);
+//             if (jsonData[i].name === word) {
+//                 jsonData2 = jsonData.upcomingEvents._total;
+//                 console.log("data2 " + jsonData2);
+//                 for (var i = 0; i < jsonData2.length; i++) {
+//                     // showData ends up being the string containing the show data we will print to the console
+//                     var showData = [
+//                         //             Name of the venue
+//                         // Venue location
+//                         // Date of the Event (use moment to format this as "MM/DD/YYYY")
+//                         "Venue: " + jsonData.venue[i],
+//                         "Location: " + jsonData.location[i],
+//                         "Event Date: " + jsonData.date[i],
+//                     ].join("\n\n");
+
+//                     // Append showData and the divider to log.txt, print showData to the console
+//                     fs.appendFile("log.txt", showData + divider, function (err) {
+//                         if (err) throw err;
+//                         console.log(showData);
+//                     });
+//                 }
+//             }
+//         }
+//     });
+// };
+function doWhat() {
+    fs.readFile('random.txt', "utf8", function (error, data) {
+        var txt = data.split(',');
+
+        findSong(txt[1]);
+    });
+}
